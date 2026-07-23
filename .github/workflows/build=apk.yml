@@ -6,7 +6,7 @@ on:
 jobs:
   build-android-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
@@ -17,12 +17,14 @@ jobs:
           python-version: '3.11'
           
       - name: Install Flet
-        run: pip install flet
+        run: |
+          pip install -i https://pypi.tuna.tsinghua.edu.cn/simple flet
+          
+      - name: 设置 Flutter 镜像
+        run: |
+          export FLUTTER_STORAGE_BASE_URL="https://mirrors.tuna.tsinghua.edu.cn/flutter"
+          export PUB_HOSTED_URL="https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
           
       - name: Build APK
         run: |
-          flet build apk
-    
-
-
-    
+          flet build apk --name "芮城旅游端" --android-package-name com.ruicheng.travel --icon icon.png
